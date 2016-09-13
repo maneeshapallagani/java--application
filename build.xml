@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!-- this is -->
+<project name="java-junit-template-project" default="Jar" basedir=".">
+  <property name="version" value="1.2"/>
+  <property name="main.build.dir" value="build/main" />
+  <property name="main.src.dir" value="src" />
+  <property name="test.build.dir" value="build/test" />
+  <property name="test.src.dir" value="test" />
+
+  <path id="classpath.base" >
+    <pathelement location="lib/mysql-connector-java-5.1.38-bin.jar"/>
+  </path>
+
+  <path id="classpath.test">
+    <pathelement location="lib/junit-4.10.jar" />
+    <pathelement location="build/jar/Project.jar"/>
+    <pathelement location="lib/mysql-connector-java-5.1.38-bin.jar"/>
+    <path refid="classpath.base" />
+  </path>
+  
+  <target name="Jar" depends="compile">
+        <mkdir dir="./build/jar"/>
+        <jar destfile="./build/jar/Project.jar" basedir="${main.build.dir}">
+        <zipgroupfileset dir="./lib" includes="*.jar"/>
+            <manifest>
+                <attribute name="Main-Class" value="com.netenrich.Main"/>
+                <attribute name="Implementation-Version" value="${version}"/>
+            </manifest>
+        </jar>
+  </target>
+
+  <target name="compile" depends="clean">
+    <mkdir dir="${main.build.dir}"/>
+    <javac srcdir="${main.src.dir}" destdir="${main.build.dir}" includeantruntime="false">
+      <classpath refid="classpath.base"/>
+    </javac>
+  </target>
+  
+  <!-- delete all class files -->
+  <!-- To run this: use "ant clean" -->
+  <target name="clean">
+    <delete>
+        <fileset dir="${basedir}" includes="**/*.class" />
+    </delete>
+    <delete dir="./build"/>
+    <echo message="clean done" />
+  </target>
+</project>
